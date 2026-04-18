@@ -1,4 +1,0 @@
-git add Federated_Anomaly_Detection.zip
-git commit -m "Add zip file"
-git push
-git status
