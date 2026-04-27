@@ -1,0 +1,1789 @@
+\documentclass[a4paper,fleqn,final,1p]{cas-dc}
+\AtBeginDocument{\thispagestyle{empty}}
+\usepackage[numbers]{natbib}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{rotating}
+
+\usepackage{tabularx}
+\usepackage{array}
+
+\usepackage{mathtools}
+\usepackage{booktabs}
+
+\usepackage{flushend}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\usepackage{graphicx}
+
+\usepackage{algpseudocode}
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{amsmath}
+\usepackage{amssymb} 
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+\AtBeginDocument{
+\AtBeginShipoutNext{\AtBeginShipoutDiscard}
+}
+\renewcommand{\floatpagefraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\makeatletter
+\let\ps@pprintTitle\ps@plain
+\makeatother
+\shorttitle{Adaptive Cross Layer Control for Scalable Wireless Ad Hoc Networks}
+
+\shortauthors{S Gopikrishnan et~al.}
+
+\title [mode = title]{Adaptive Cross-Layer Control for Scalable Wireless Ad Hoc Networks} 
+
+
+%name: Mani deepika Arja
+%reg no: 23MIC7296
+%gamil: manideepika4114@gamil.com 
+%vitap mail: deepika.23mic7296@vitapstudent.ac.in
+%orcid:0009-0005-0355-6834
+
+
+\author[1]{Mani deepika Arja}[orcid=0009-0005-0355-6834]
+\ead{deepika.23mic7296@vitapstudent.ac.in}
+\address[1]{School of Computer Science and Engineering, VIT-AP University, Amaravathi. Andhra Pradesh, India}
+
+\author[1]{Author-2} [orcid=0000-0001-9082-9012]
+\cormark[1]
+\ead{gopikrishnan.s@vitap.ac.in}
+
+\author[3]{Author-3} [orcid=0000-0001-9082-9012]
+\ead{gopikrishnan.s@vitap.ac.in}
+
+\cortext[cor1]{Corresponding author}
+
+\begin{abstract}
+Wireless ad hoc networks are inherently dynamic, decentralised, and resource constrained, making communication in these networks more difficult. Existing layered network architectures are not suitable for such networks, as they are based on independent decision making at each layer without sharing information, resulting in suboptimal performance. These shortcomings increase the packet drop rate end to end delay, and lead to suboptimal use of bandwidth and energy resources, particularly in dynamic network environments.In this paper, we present an adaptive cross layer control framework that facilitates interaction between different protocol layers. The proposed mechanism dynamically adapts routing, transmission and resource allocation policies according to changing network conditions like mobility, traffic and channel conditions. This increases the network responsiveness and allows efficient network operation even under increasing node density, thus improving scalability under different network scenarios.The proposed approach is simulated using the ns 3 platform and compared with other approaches using performance metrics such as packet delivery ratio, end to end delay, jitter, network throughput, communication overhead, computational overhead, and energy consumption. The evaluation shows that the proposed adaptive cross layer approach leads to improved network performance efficiency, scalability and reliability over traditional methods. This work underscores the need for cross layer optimization to enable reliable and scalable communication in wireless ad hoc networks.
+\end{abstract}
+
+\begin{keywords}
+Wireless Ad Hoc Networks \sep 
+Mobile Ad Hoc Networks \sep 
+Cross Layer Design \sep 
+Adaptive Routing \sep 
+Routing Protocols \sep 
+Network Scalability \sep 
+Quality of Service \sep 
+Energy Efficiency \sep 
+Throughput Optimization \sep  
+Packet Delivery Ratio \sep 
+Dynamic Topology \sep 
+Multi Hop Communication
+\end{keywords}
+
+\begingroup
+\let\clearpage\relax
+\let\newpage\relax
+\maketitle
+\endgroup
+
+\section{Introduction}
+
+Wireless ad hoc networks are now a vital mode of communication because they do not require a fixed infrastructure and offer distributed multi hop communication. These networks are extensively used in disaster management, military, smart transportation, and Internet of Things applications. However, while flexible, the growing number of nodes, mobility, interference, limited spectrum, and energy constraints introduce significant challenges \cite{mashhadani2025security, iyoloma2025survey, qian2024wireless, prakash2024}. These factors result in packet loss, increased delay, and poor routing performance, highlighting the need for scalable and robust mechanisms.
+
+In conventional layered protocol designs, routing, channel access, and resource management operate independently and do not allow efficient information sharing among layers. This limits adaptability in dynamic environments where routing decisions must consider congestion, link quality, and channel contention jointly. Cross layer communication has emerged as an effective approach by facilitating controlled interaction between protocol layers to enhance coordination and performance \cite{priya2024, inzimam2024, hemalatha2024, ojeda2024}. Previous research demonstrates that cross layer optimization can improve resource efficiency; however, many existing methods lack flexibility or introduce additional complexity.
+
+Another critical issue is that existing approaches often focus on optimizing individual parameters without considering joint control of routing stability, energy efficiency, and contention dynamics. Static configurations frequently fail to adapt to dynamic traffic patterns and node mobility. Several optimization and machine learning based approaches improve specific performance aspects, but they may increase processing overhead and limit scalability \cite{SanthoshKumar2025280, Aluri2025707, allaw2024}. These limitations highlight the need for lightweight adaptive mechanisms that operate in a distributed manner with low overhead.
+
+In this work, an adaptive cross layer communication framework with congestion aware control and routing adaptation is proposed. The approach considers congestion levels, link quality, and energy constraints to support efficient decision making and data transmission. By adapting to changing network conditions, the proposed framework aims to improve throughput, reduce delay, and enhance scalability in dynamic wireless ad hoc networks.
+
+\subsection{Research Motivation and Background}
+
+The aim of this research is to develop a distributed adaptive control mechanism for optimizing scalable wireless ad hoc networks using joint cross layer control. The proposed method considers both physical layer conditions and network layer routing information to improve decision making in dynamic traffic scenarios. By jointly considering multiple parameters rather than isolated metrics, the framework enhances communication stability and network adaptability.
+
+A hybrid routing and control scheme is proposed using link quality, contention, energy, and path related metrics for adaptive operation. This enables more effective path selection, reduces routing overhead, and improves overall efficiency. The architecture is designed to maintain scalability as node density increases while reducing delay, increasing throughput, and improving resource utilization. The rest of the paper is organized as follows. Section II presents the literature survey, Section III describes the proposed work, Section IV discusses results and evaluation, and the final section concludes the work.
+
+\subsection{Research Objectives}
+
+The goal of this study is to analyze existing communication paradigms in dynamic wireless networks and identify the factors influencing routing reliability and scalability. Particular emphasis is given to topology changes, contention, congestion, and inefficient resource utilization under varying network conditions.
+
+Another objective is to design an adaptive cross layer control system that enables interaction between protocol layers for improved routing and transmission decisions. The proposed approach dynamically adapts to the current network state while maintaining low communication overhead.
+
+This research also aims to improve key performance metrics such as packet delivery ratio, throughput, delay, routing stability, and energy efficiency through contention aware adaptation and intelligent path selection. These improvements support reliable communication in large scale and highly dynamic environments.
+
+Finally, the proposed approach is evaluated through simulation and compared with traditional methods in terms of scalability, efficiency, and communication reliability.
+
+\section{Literature Survey}
+
+\subsection{Review Paper Analysis}
+
+Recent research in wireless ad hoc networks has primarily focused on scalability, security, and dynamic communication. Security aware routing algorithms enhance network resilience through intrusion detection systems and secure routing protocols. These approaches improve reliability under adversarial conditions. However, additional verification mechanisms introduce processing overhead and may increase latency, especially in dense network deployments. These limitations indicate that improving security alone does not guarantee optimal performance under high traffic and node density conditions \cite{mashhadani2025security, qian2024wireless}.
+
+Adaptive communication models have been proposed to improve efficiency under varying channel conditions. Wireless mesh techniques and anomaly detection methods enhance connectivity and reliability through intelligent traffic management and optimization. While these approaches demonstrate strong performance in controlled environments, they rely heavily on training data and computational resources, which limits their applicability in resource constrained ad hoc networks. This highlights the need for lightweight adaptive approaches suitable for dynamic and complex environments \cite{esteban2023anomaly, adanigboa2025energy}.
+
+Cross layer optimization has emerged as an effective strategy to improve interaction among protocol layers. Existing frameworks utilize physical, MAC, and network layer information to enhance resource allocation, congestion control, and packet delivery. Although these methods achieve performance improvements, they introduce additional complexity and control overhead. In highly dynamic scenarios, synchronization among layers can reduce adaptability, indicating the need for distributed and lightweight cross layer control mechanisms \cite{prakash2024, priya2024, inzimam2024}.
+
+Recent studies also explore artificial intelligence, software defined networking, and optimization techniques to improve network efficiency and security. These methods enhance quality of service through intelligent adaptation. However, many require centralized coordination or incur high computational cost, limiting scalability in distributed environments. Existing routing optimization approaches often focus on congestion control or attack prevention but fail to provide a unified solution addressing contention, adaptability, and energy efficiency \cite{hemalatha2024, ojeda2024, allaw2024, naeem2024, srinivasan2024}.
+
+The reviewed literature indicates that significant improvements have been achieved in individual performance metrics, but comprehensive solutions remain limited. Many approaches increase protocol complexity or fail to adapt effectively to rapidly changing network conditions. This motivates the design of a lightweight adaptive framework that integrates contention control, energy efficiency, and scalable routing using distributed cross layer interaction.
+
+\subsection{Base Paper Analysis}
+
+Recent base papers demonstrate that adaptive routing optimization can significantly enhance communication efficiency in wireless ad hoc networks. Hybrid bio inspired routing algorithms improve path discovery through adaptive optimization under varying traffic conditions. Experimental results indicate improvements in packet delivery and congestion control compared to traditional routing approaches. However, iterative optimization introduces computational overhead and requires parameter tuning, making it less suitable for highly dynamic environments \cite{SanthoshKumar2025280}.
+
+Cross layer communication techniques improve signal quality and reliability through coordination between physical and network layers. These approaches enhance throughput and reduce packet loss under high density conditions. Despite these advantages, dependency on predefined configurations and assumptions of stable node behavior limits adaptability in dynamic scenarios. This suggests the need for adaptive mechanisms capable of responding to varying network conditions \cite{Rasulov2025116}.
+
+Security enhancement in wireless networks has been addressed through machine learning based intrusion detection systems. These models improve detection accuracy and reduce false positives. However, model training and maintenance increase computational overhead, which affects delay and energy consumption in resource constrained nodes. This indicates that security improvements must be balanced with scalability and efficiency in distributed environments \cite{Aluri2025707}.
+
+Energy efficient routing approaches incorporate duty cycling and traffic aware transmission to reduce energy consumption and extend network lifetime. These techniques show improved efficiency under moderate mobility conditions. However, many rely on static thresholds or limited topology assumptions, reducing flexibility in highly dynamic networks. This highlights the importance of adaptive and contention aware parameter control \cite{Vastrad2025372}.
+
+Cloud assisted ad hoc communication and cross layer security frameworks enhance trust, data management, and system reliability through coordinated protocols. While these approaches improve overall performance, they introduce additional complexity and often depend on infrastructure, which is not suitable for purely ad hoc environments. Analysis of base papers indicates that existing solutions address specific objectives, but an integrated approach for scalability, adaptability, energy efficiency, and reliable routing remains an open research challenge \cite{Ghourab20252011, Ahmed20252157}.
+
+\textbf{Comparison of Existing Methods}
+
+Comparison of existing methods is essential to evaluate their effectiveness in addressing scalability, adaptability, energy efficiency, and routing reliability in wireless ad hoc networks. Although several approaches improve individual performance aspects, most focus on isolated optimization objectives and do not provide a unified solution for dynamic network operation. Some methods enhance security or congestion control, while others focus on routing efficiency or energy conservation. However, challenges such as high computational complexity, limited adaptability, and infrastructure dependency remain significant.
+
+To analyze the strengths and limitations of existing approaches, a comparative study is presented in Table~\ref{tab:literature}. The comparison evaluates various methods based on techniques used, issues addressed, and limitations. This analysis helps identify research gaps and supports the development of the proposed AODV based adaptive cross layer communication framework.
+
+\begin{table*}[t]
+\centering
+\caption{Comparative Analysis of Existing Methods in Wireless Ad Hoc Networks}
+\label{tab:literature}
+\scriptsize
+\renewcommand{\arraystretch}{1.7}
+\renewcommand{\arraystretch}{1.55}
+\setlength{\tabcolsep}{4pt}
+
+\begin{tabularx}{\textwidth}{|c|X|X|X|X|}
+\hline
+\textbf{Reference} &
+\textbf{Method Proposed} &
+\textbf{Techniques Used} &
+\textbf{Issues Resolved} &
+\textbf{Limitation} \\
+\hline
+
+\cite{SanthoshKumar2025280}
+&
+Hybrid bio inspired routing framework
+&
+Adaptive optimization, swarm inspired routing, path selection
+&
+Improves scalability, routing efficiency and congestion handling
+&
+High computational overhead and parameter sensitivity
+\\
+\hline
+
+\cite{Rasulov2025116}
+&
+Integrated cross layer communication model
+&
+Physical layer and routing layer coordination
+&
+Improves throughput, signal quality and packet delivery
+&
+Requires specialized configurations and stable topology
+\\
+\hline
+
+\cite{Aluri2025707}
+&
+Machine learning intrusion detection
+&
+Supervised learning and anomaly analysis
+&
+Enhances security and attack detection accuracy
+&
+High processing complexity and training dependency
+\\
+\hline
+
+\cite{Vastrad2025372}
+&
+CRETA adaptive routing protocol
+&
+Duty cycle control and routing optimization
+&
+Reduces energy usage and extends network lifetime
+&
+Limited adaptability under highly dynamic conditions
+\\
+\hline
+
+\cite{Ghourab20252011}
+&
+Cross layer security framework
+&
+Authentication, encryption and anomaly monitoring
+&
+Improves resilience and secure communication
+&
+Increased control overhead and implementation complexity
+\\
+\hline
+
+\cite{Ahmed20252157}
+&
+Cloud integrated ad hoc communication
+&
+Distributed routing with cloud assisted processing
+&
+Improves data management and throughput
+&
+Depends on infrastructure availability
+\\
+\hline
+
+\cite{mashhadani2025security}
+&
+Security aware routing model
+&
+Intrusion detection and secure forwarding
+&
+Improves attack resilience and routing robustness
+&
+Verification overhead increases latency
+\\
+\hline
+
+\cite{qian2024wireless}
+&
+Wireless mesh communication framework
+&
+Structured routing and distributed connectivity
+&
+Improves multi hop communication efficiency
+&
+Performance degradation under interference
+\\
+\hline
+
+\cite{esteban2023anomaly}
+&
+Anomaly driven network monitoring
+&
+Deep learning and optimization
+&
+Improves abnormal traffic detection
+&
+Resource intensive for constrained nodes
+\\
+\hline
+
+\cite{adanigboa2025energy}
+&
+Energy aware routing optimization
+&
+Energy metrics and adaptive path selection
+&
+Reduces consumption and improves lifetime
+&
+Weak adaptation under topology variation
+\\
+\hline
+
+\cite{prakash2024}
+&
+Cross layer optimization framework
+&
+Layer interaction and resource coordination
+&
+Improves utilization and congestion handling
+&
+High implementation complexity
+\\
+\hline
+
+\cite{priya2024}
+&
+Adaptive intelligent optimization
+&
+Learning based parameter tuning
+&
+Improves adaptability and efficiency
+&
+Computational overhead remains high
+\\
+\hline
+
+\end{tabularx}
+\end{table*}
+
+\subsection{Research Gaps,Motivation,Problem Statement}
+
+\subsubsection{Research Gaps}
+
+Even though there have been significant advances in adaptive routing and cross layer design, several research challenges still remain in wireless ad hoc networks. Many existing techniques improve performance in specific aspects such as security, routing efficiency, or energy conservation, but they lack a holistic approach that integrates all these objectives. Furthermore, several approaches assume moderate mobility or relatively stable network topology, which restricts their applicability in dense and highly dynamic environments \cite{SanthoshKumar2025280,Rasulov2025116,Vastrad2025372}.
+
+Another major limitation is the high computational overhead associated with learning based and optimization driven solutions. While these methods improve adaptability, their execution cost limits their deployment in distributed and resource constrained nodes. Some frameworks also depend on predefined thresholds or infrastructure support, which reduces their ability to adapt to dynamic traffic and varying channel conditions. In addition, limited attention has been given to contention aware adaptive control integrated with routing mechanisms \cite{Aluri2025707,Ghourab20252011}.
+
+Existing research also lacks a unified approach that simultaneously considers dynamic duty cycle adaptation and routing stability. Many protocols treat MAC layer adaptation independently, leading to suboptimal coordination and performance degradation. These limitations indicate the need for a lightweight and adaptive cross layer framework that improves scalability, reliability, and energy efficiency under dynamic network conditions.
+
+\subsubsection{Motivation}
+
+The increasing adoption of wireless ad hoc networks in emergency communication, Internet of Things environments, and distributed sensing applications has created a strong demand for scalable, adaptive, and energy efficient routing mechanisms. As node density and traffic load increase, traditional protocols suffer from performance degradation due to congestion and frequent topology changes. Previous studies demonstrate that optimizing individual parameters improves certain metrics, but does not guarantee overall performance in highly dynamic scenarios.
+
+Another key motivation arises from the limitations of existing cross layer and routing frameworks, which either introduce high complexity or fail to respond effectively to real time contention conditions. Efficient communication requires joint consideration of channel state, traffic load, and duty cycle behavior rather than independent optimization. These observations motivate the design of a lightweight and adaptive framework that can dynamically respond to network conditions and improve packet delivery, delay, and energy utilization.
+
+\subsubsection{Problem Statement}
+
+The performance of wireless ad hoc networks is significantly affected by topology changes, contention, congestion, and insufficient coordination between protocol layers. Existing routing protocols make forwarding decisions without considering real time channel conditions, queue backlog, collision probability, or residual energy. As a result, packet loss increases, delay becomes higher, and overall energy efficiency decreases, especially in large scale and dense network deployments.
+
+The primary problem addressed in this research is the lack of an integrated solution that jointly considers contention awareness, dynamic MAC adaptation, and routing stability in a distributed manner. Existing approaches solve individual issues but do not provide a unified framework that ensures scalability, reliability, and energy efficiency under dynamic conditions. This research aims to develop an adaptive cross layer AODV based mechanism that improves packet delivery ratio, reduces delay, and optimizes energy consumption in wireless ad hoc networks.
+
+
+\section{Proposed Work}
+
+\subsection{System Model}
+
+The wireless ad hoc network is represented as a graph given in Eq.~\ref{eq:graphmodel},
+
+\begin{equation}
+\mathcal{G}=(\mathcal{V},\mathcal{E})
+\label{eq:graphmodel}
+\end{equation}
+
+where $\mathcal{V}$ denotes the set of sensor nodes and $\mathcal{E}$ represents communication links among neighboring nodes. A link exists when two nodes remain within communication range and can exchange packets successfully. The network follows a distributed architecture without centralized coordination and supports multi hop communication among source and destination nodes through intermediate forwarding nodes. This model captures dense wireless environments where scalability, contention control and adaptive routing are important performance requirements.
+
+Nodes are randomly deployed over an observation area represented in Eq.~\ref{eq:area},
+
+\begin{equation}
+A=L\times W
+\label{eq:area}
+\end{equation}
+
+where $L$ and $W$ denote network dimensions. Each node maintains a neighborhood set defined in Eq.~\ref{eq:neighbor}
+
+\begin{equation}
+\mathcal N_i=
+\{v_j\in \mathcal V|(v_i,v_j)\in\mathcal E\}
+\label{eq:neighbor}
+\end{equation}
+
+which identifies all neighboring nodes within communication radius. In addition to communication range, interference among nearby transmissions is considered in order to model contention under dense deployments. This system assumption captures realistic wireless behavior where collisions and congestion increase with node density.
+
+Traffic generation follows dynamic packet arrivals. The queue evolution at each node is modeled using Eq.~\ref{eq:queue}
+
+\begin{equation}
+q_i(t+1)=
+\min
+\left(
+Q_{max},
+q_i(t)+a_i(t)-d_i(t)
+\right)
+\label{eq:queue}
+\end{equation}
+
+where $a_i(t)$ denotes packet arrivals and $d_i(t)$ denotes successfully transmitted packets. This model captures traffic accumulation, congestion growth and service dynamics under varying loads. Queue behavior serves as one indicator for adaptive contention estimation used later in the proposed framework.
+
+Routing is performed using AODV. A discovered route between source and destination is represented by Eq.~\ref{eq:path}
+
+\begin{equation}
+P_{i,d}=
+\{v_i,v_{k1},v_{k2},...,v_d\}
+\label{eq:path}
+\end{equation}
+
+where intermediate nodes form the routing path. Reactive route discovery reduces control overhead because routes are established only when needed. This supports scalability and complements the adaptive medium access strategy proposed in this work.
+
+Channel contention is monitored locally at each node through the observation vector defined in Eq.~\ref{eq:obs}
+
+\begin{equation}
+\mathbf z_i(t)=
+[b_i(t),p_{c,i}(t),q_i(t),r_i(t)]
+\label{eq:obs}
+\end{equation}
+
+where channel occupancy, collision probability, queue load and retransmission activity jointly represent local contention conditions. Based on these measurements, a contention metric is computed as expressed in Eq.~\ref{eq:cont}
+
+\begin{equation}
+C_i(t)=
+f
+\left(
+b_i(t),
+p_{c,i}(t),
+q_i(t),
+r_i(t)
+\right)
+\label{eq:cont}
+\end{equation}
+
+This metric forms the basis for adaptive scheduling and routing decisions in later phases. Through distributed observation and local adaptation, the system model supports energy efficiency, reduced delay and scalable operation in dense wireless ad hoc environments.
+
+\subsection{Overview of Proposed Framework}
+
+This paper presents Contention Aware Adaptive MAC with AODV Routing as CAAM AODV in ns3 for scalability of wireless ad hoc networks. This approach couples medium access adaptation with routing to boost packet throughput, minimize delay and increase energy efficiency when nodes are deployed in dense and dynamic settings. The proposed protocol differs from existing protocols, which use static scheduling rules, by observing network conditions and adapting node operation using distributed control decisions that are based on local measurements.
+
+The proposed framework works in an iterative feedback loop whereby each node measures contention, calculates a contention score, defines network state and adjusts duty cycle operations before packet routing and transmission. The framework enhances network scalability without excessive protocol overhead through its MAC control and AODV routing decision making. The complete operational workflow of the proposed framework is illustrated in Figure~\ref{fig:overview}.
+
+\begin{center}
+\includegraphics[width=0.8\linewidth]{figures/overview.pdf}
+\end{center}
+\textbf{Figure 1: System Overview of Proposed Model}
+\label{fig:overview}
+
+
+
+\subsection{Phase I : Channel Observation and Traffic Monitoring}
+
+The first phase performs continuous observation of local channel activity and traffic behavior at each node. The objective of this phase is to estimate congestion conditions using only locally available measurements without introducing additional control overhead. Each node periodically collects channel occupancy, collision behavior, queue status and retransmission activity. These observations form the adaptive feedback foundation of the proposed framework and support scalable distributed operation in dense wireless ad hoc environments.
+
+At observation interval $t$, each node forms a contention observation vector defined in Eq.~\ref{eq:p1obs}
+
+\begin{equation}
+\mathbf z_i(t)=
+[b_i(t),p_{c,i}(t),q_i(t),r_i(t)]
+\label{eq:p1obs}
+\end{equation}
+
+where $b_i(t)$ denotes channel busy ratio, $p_{c,i}(t)$ represents collision probability, $q_i(t)$ denotes instantaneous queue occupancy and $r_i(t)$ represents retransmission activity. These parameters jointly characterize surrounding medium contention and provide multidimensional information for adaptive decision making.
+
+Channel occupancy is estimated over observation window $W$ using Eq.~\ref{eq:busy}
+
+\begin{equation}
+b_i(t)=
+\frac{1}{W}
+\sum_{k=t-W+1}^{t}
+\mathbf1[busy]
+\label{eq:busy}
+\end{equation}
+
+where $\mathbf1[\cdot]$ is the indicator function. Larger values of $b_i(t)$ indicate heavier channel utilization and increasing contention pressure among neighboring nodes.
+
+Collision probability is estimated through transmission outcomes as given in Eq.~\ref{eq:collision}
+
+\begin{equation}
+p_{c,i}(t)=
+\frac{
+N_{coll}
+}{
+N_{tx}
+}
+\label{eq:collision}
+\end{equation}
+
+where $N_{coll}$ denotes collision events and $N_{tx}$ denotes attempted transmissions. This parameter directly captures access conflicts under congested channel conditions.
+
+Queue occupancy is normalized using Eq.~\ref{eq:normqueue}
+
+\begin{equation}
+\hat q_i(t)=
+\frac{q_i(t)}{Q_{max}}
+\label{eq:normqueue}
+\end{equation}
+
+where $Q_{max}$ represents maximum queue capacity. This normalized metric provides a bounded representation of traffic pressure independent of hardware limitations.
+
+Retransmission intensity is modeled through Eq.~\ref{eq:retrans}
+
+\begin{equation}
+r_i(t)=
+\frac{
+N_{ret}
+}{W}
+\label{eq:retrans}
+\end{equation}
+
+where $N_{ret}$ denotes retransmission attempts observed within the monitoring window. Higher retransmission activity generally indicates worsening channel conditions.
+
+Traffic arrival behavior is updated using exponential averaging through Eq.~\ref{eq:arrival}
+
+\begin{equation}
+\lambda_i(t)=
+\gamma \lambda_i(t-1)
++
+(1-\gamma)a_i(t)
+\label{eq:arrival}
+\end{equation}
+
+where $\gamma$ controls responsiveness to traffic variation. This formulation enables adaptation to bursty traffic while suppressing short duration fluctuations.
+
+A composite load indicator is then computed using Eq.~\ref{eq:load}
+
+\begin{equation}
+L_i(t)=
+\alpha_L\lambda_i(t)
++
+(1-\alpha_L)\hat q_i(t)
+\label{eq:load}
+\end{equation}
+
+which combines arrival intensity and buffer pressure into a unified traffic load measure.
+
+To emphasize recent observations, weighted channel occupancy is refined using Eq.~\ref{eq:weightedbusy}
+
+\begin{equation}
+b_i(t)=
+\frac{
+\sum \omega(k,t)\mathbf1[busy]
+}{
+\sum \omega(k,t)
+}
+\label{eq:weightedbusy}
+\end{equation}
+
+where weighting coefficient $\omega(k,t)$ prioritizes recent measurements. This improves responsiveness to transient congestion changes.
+
+Channel idle probability is then obtained using Eq.~\ref{eq:idle}
+
+\begin{equation}
+P_{idle,i}(t)=1-b_i(t)
+\label{eq:idle}
+\end{equation}
+
+which estimates transmission opportunity availability for later scheduling decisions.
+
+Collectively, the observation vector in Eq.~\ref{eq:p1obs}, the load indicator in Eq.~\ref{eq:load} and the idle probability in Eq.~\ref{eq:idle} provide the statistical basis for contention score computation in the next phase. Since all parameters are locally measured, the monitoring process remains lightweight while supporting scalability and adaptive communication control.
+
+Algorithm~\ref{alg:phase1} summarizes the complete observation process executed independently at each node.
+
+\begin{algorithm}[H]
+\caption{Phase I Channel Observation Procedure}
+\label{alg:phase1}
+\begin{algorithmic}[1]
+
+\Require
+Observation window $W$,
+queue capacity $Q_{max}$,
+forgetting factor $\gamma$
+
+\Ensure
+Updated observation vector $\mathbf z_i(t)$
+
+\State Initialize measurement buffers
+
+\For{each decision interval $t$}
+
+\State Perform carrier sensing
+
+\State Measure busy channel ratio
+
+\State Record transmission attempts
+
+\State Estimate collision probability
+
+\State Measure queue occupancy
+
+\State Estimate retransmission activity
+
+\State Update arrival rate
+
+\State Compute load indicator
+
+\State Compute idle probability
+
+\State Form observation vector
+$\mathbf z_i(t)$
+
+\State Forward outputs to Phase II
+
+\EndFor
+
+\end{algorithmic}
+\end{algorithm}
+
+The proposed observation phase establishes a distributed sensing foundation for adaptive protocol operation. By integrating occupancy estimation, collision monitoring, traffic load measurement and retransmission analysis, this phase provides reliable contention awareness while maintaining low overhead and scalable operation under dense wireless conditions.
+
+\subsection{Phase II : Contention Score Computation}
+
+The second phase transforms local observations collected in Phase I into a quantitative contention score that represents instantaneous medium competition around each node. This score serves as the principal decision variable of the proposed framework and supports adaptive state classification and scheduling control in later phases. Unlike conventional methods relying only on binary channel occupancy indicators, the proposed model combines multiple congestion related parameters into a unified contention representation.
+
+Using the observation vector obtained in Phase I, each node computes a raw contention score using Eq.~\ref{eq:p2raw}
+
+\begin{equation}
+C_i^{raw}(t)=
+w_1 b_i(t)+
+w_2 p_{c,i}(t)+
+w_3 \hat q_i(t)+
+w_4 r_i(t)
+\label{eq:p2raw}
+\end{equation}
+
+where the weighting coefficients satisfy the normalization condition in Eq.~\ref{eq:p2weights}
+
+\begin{equation}
+w_1+w_2+w_3+w_4=1
+\label{eq:p2weights}
+\end{equation}
+
+This weighted formulation combines channel occupancy, collision pressure, queue load and retransmission activity into a single scalar contention estimate.
+
+The normalized queue occupancy used in Eq.~\ref{eq:p2raw} is expressed in Eq.~\ref{eq:p2queue}
+
+\begin{equation}
+\hat q_i(t)=
+\frac{q_i(t)}{Q_{max}}
+\label{eq:p2queue}
+\end{equation}
+
+which ensures bounded behavior independent of queue size variations.
+
+To suppress short duration fluctuations and burst driven oscillations, exponential smoothing is applied using Eq.~\ref{eq:p2smooth}
+
+\begin{equation}
+C_i(t)=
+\beta C_i^{raw}(t)
++
+(1-\beta)C_i(t-1)
+\label{eq:p2smooth}
+\end{equation}
+
+where $\beta$ controls the tradeoff between responsiveness and stability. This smoothing improves robustness under rapidly varying traffic conditions.
+
+Temporal contention variation is measured through the gradient defined in Eq.~\ref{eq:p2grad}
+
+\begin{equation}
+\Delta C_i(t)=
+C_i(t)-C_i(t-1)
+\label{eq:p2grad}
+\end{equation}
+
+where positive values indicate rising congestion and negative values indicate improving channel conditions.
+
+To preserve numerical stability, the contention score is bounded through Eq.~\ref{eq:p2bound}
+
+\begin{equation}
+C_i(t)=
+\min
+\Big(
+1,
+\max(0,C_i(t))
+\Big)
+\label{eq:p2bound}
+\end{equation}
+
+ensuring the contention metric remains within a normalized range suitable for adaptive control.
+
+An auxiliary effective load indicator is further defined in Eq.~\ref{eq:p2load}
+
+\begin{equation}
+\Phi_i(t)=
+b_i(t)
+\left(
+1+p_{c,i}(t)
+\right)
+\label{eq:p2load}
+\end{equation}
+
+which captures the combined influence of occupancy and collision pressure.
+
+Short term contention stability is estimated through the mean contention score over history window $M$ using Eq.~\ref{eq:p2mean}
+
+\begin{equation}
+\bar C_i(t)=
+\frac1M
+\sum_{k=t-M+1}^{t}
+C_i(k)
+\label{eq:p2mean}
+\end{equation}
+
+while score variance is computed through Eq.~\ref{eq:p2var}
+
+\begin{equation}
+\sigma_{C_i}^2(t)=
+\frac1M
+\sum_{k=t-M+1}^{t}
+\left(
+C_i(k)-\bar C_i(t)
+\right)^2
+\label{eq:p2var}
+\end{equation}
+
+Large variance indicates unstable congestion conditions and may trigger stronger smoothing behavior.
+
+The sensitivity of the contention model with respect to channel occupancy is expressed in Eq.~\ref{eq:p2sens}
+
+\begin{equation}
+\frac{\partial C_i^{raw}(t)}
+{\partial b_i(t)}
+=
+w_1
+\label{eq:p2sens}
+\end{equation}
+
+showing the relative contribution of occupancy measurements within the composite score.
+
+Collectively, the contention score in Eq.~\ref{eq:p2smooth}, the gradient in Eq.~\ref{eq:p2grad}, and the stability indicators in Eq.~\ref{eq:p2mean} and Eq.~\ref{eq:p2var} provide the quantitative basis for contention state classification in the next phase.
+
+Algorithm~\ref{alg:phase2} summarizes the complete contention computation process.
+
+\begin{algorithm}[H]
+\caption{Phase II Contention Score Computation}
+\label{alg:phase2}
+\begin{algorithmic}[1]
+
+\Require
+Observation vector $\mathbf z_i(t)$,
+weights $w_1,w_2,w_3,w_4$,
+smoothing factor $\beta$
+
+\Ensure
+Contention score $C_i(t)$
+
+\State Extract observation parameters
+
+\State Compute normalized queue occupancy
+
+\State Compute raw contention score
+
+\State Apply exponential smoothing
+
+\State Compute contention gradient
+
+\State Bound score within valid range
+
+\State Compute effective load metric
+
+\State Update history buffer
+
+\State Compute mean contention
+
+\State Compute contention variance
+
+\If{variance exceeds threshold}
+\State Increase smoothing control
+\Else
+\State Maintain default smoothing
+\EndIf
+
+\State Forward contention score to Phase III
+
+\Return
+$C_i(t)$
+
+\end{algorithmic}
+\end{algorithm}
+
+The proposed contention computation phase converts distributed observations into a stable adaptive metric for congestion estimation. By combining weighted contention fusion, temporal smoothing and stability analysis, this phase provides robust support for adaptive protocol control while maintaining low computational complexity.
+
+\subsection{Phase III : Four State Contention Classification}
+
+After contention estimation in Phase II, each node maps the computed contention score into an operating state representing current congestion severity. This classification phase serves as the decision layer of the proposed framework, since adaptive scheduling behavior is determined by the assigned state. Instead of binary idle and busy decisions used in conventional protocols, the proposed approach employs four contention states to provide finer control under varying network conditions.
+
+The state assignment model is defined using Eq.~\ref{eq:p3state}
+
+\begin{equation}
+S_i(t)=
+\begin{cases}
+S_1, & C_i(t)<0.25 \\
+S_2, & 0.25\le C_i(t)<0.50 \\
+S_3, & 0.50\le C_i(t)<0.75 \\
+S_4, & C_i(t)\ge0.75
+\end{cases}
+\label{eq:p3state}
+\end{equation}
+
+State $S_1$ represents low contention operation. State $S_2$ denotes moderate congestion. State $S_3$ corresponds to high contention conditions, while state $S_4$ represents critical congestion requiring aggressive adaptation. This classification enables differentiated protocol responses according to congestion severity.
+
+Direct threshold crossings may produce unstable switching near state boundaries. To improve classification stability, hysteresis control is introduced through the upper boundary in Eq.~\ref{eq:p3upper}
+
+\begin{equation}
+\theta_k^{+}
+=
+\theta_k+\eta
+\label{eq:p3upper}
+\end{equation}
+
+and the lower boundary in Eq.~\ref{eq:p3lower}
+
+\begin{equation}
+\theta_k^{-}
+=
+\theta_k-\eta
+\label{eq:p3lower}
+\end{equation}
+
+where $\eta$ denotes hysteresis width. These boundaries prevent rapid oscillations caused by minor contention score fluctuations.
+
+Classification confidence is estimated through distance from the nearest threshold boundary using Eq.~\ref{eq:p3bound}
+
+\begin{equation}
+d_i^{bound}(t)=
+\min_k
+\left|
+C_i(t)-\theta_k
+\right|
+\label{eq:p3bound}
+\end{equation}
+
+Larger values indicate stronger confidence that a node operates well inside a given contention region.
+
+Temporal behavior of contention states is characterized using occupancy probability over history window $H$ through Eq.~\ref{eq:p3prob}
+
+\begin{equation}
+\hat \pi_k(t)=
+\frac1H
+\sum_{h=t-H+1}^{t}
+\mathbf1
+\left[
+S_i(h)=S_k
+\right]
+\label{eq:p3prob}
+\end{equation}
+
+which estimates how frequently each contention regime occurs.
+
+The expected residence duration of each state is approximated through Eq.~\ref{eq:p3res}
+
+\begin{equation}
+\bar T_{S_k}
+=
+\frac1
+{1-\hat\pi_k(t)}
+\label{eq:p3res}
+\end{equation}
+
+which measures persistence of congestion conditions.
+
+Contention evolution tendency is represented using gradient tendency in Eq.~\ref{eq:p3trend}
+
+\begin{equation}
+\Gamma_i(t)=
+sign
+\left(
+\Delta C_i(t)
+\right)
+|\Delta C_i(t)|^{1/2}
+\label{eq:p3trend}
+\end{equation}
+
+Positive values indicate rising congestion while negative values indicate improving channel conditions.
+
+State variability is further quantified through entropy using Eq.~\ref{eq:p3entropy}
+
+\begin{equation}
+H_i(t)=
+-\sum_{k=1}^{4}
+\hat \pi_k(t)
+\log_2
+\hat \pi_k(t)
+\label{eq:p3entropy}
+\end{equation}
+
+where larger entropy indicates frequent state switching and greater network unpredictability.
+
+Transition probability between states is estimated using Eq.~\ref{eq:p3trans}
+
+\begin{equation}
+P_{jk}(t)=
+\frac{
+N_{jk}
+}{
+N_j
+}
+\label{eq:p3trans}
+\end{equation}
+
+where $N_{jk}$ denotes observed transitions from state $S_j$ to $S_k$ and $N_j$ denotes time spent in state $S_j$.
+
+An overall stability index is then computed through Eq.~\ref{eq:p3stable}
+
+\begin{equation}
+\Psi_i(t)=
+\sum_{k=1}^{4}
+P_{kk}(t)
+\hat\pi_k(t)
+\label{eq:p3stable}
+\end{equation}
+
+where larger values indicate more stable operation with fewer abrupt state changes.
+
+The classification model in Eq.~\ref{eq:p3state}, together with hysteresis control in Eq.~\ref{eq:p3upper} and Eq.~\ref{eq:p3lower}, provides a robust basis for adaptive duty cycle decisions in the next phase.
+
+Figure~\ref{fig:fsm} illustrates the four state contention transition model used in the proposed framework. The figure shows the transition between four contention states along with their corresponding adaptive actions. These state transitions play a crucial role in dynamically adjusting node behavior under varying network conditions.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.90\textwidth]{figures/secondfig.pdf}
+\caption{Phase-Wise Functional Architecture }
+\label{fig:fsm}
+\end{figure*}
+\FloatBarrier
+
+
+\begin{algorithm}[H]
+\caption{Phase III: Contention State Classification}
+\label{alg:phase3}
+\begin{algorithmic}[1]
+
+\Require Contention score $C_i(t)$, gradient $\Delta C_i(t)$, thresholds $\theta_1,\theta_2,\theta_3$
+\Ensure Updated contention state $S_i(t)$
+
+\State Compute hysteresis boundaries $\theta_k^{+}, \theta_k^{-}$
+
+\State Retrieve previous state $S_i(t-1)$
+
+\If{$C_i(t) < \theta_1$}
+
+\State $S_i(t) \gets S_1$
+
+\ElsIf{$C_i(t) < \theta_2$}
+
+\State $S_i(t) \gets S_2$
+
+\ElsIf{$C_i(t) < \theta_3$}
+
+\State $S_i(t) \gets S_3$
+
+\Else
+
+\State $S_i(t) \gets S_4$
+
+\EndIf
+
+\State Apply hysteresis correction
+
+\State Compute boundary confidence $d_i^{bound}(t)$
+
+\State Update state history
+
+\For{$k = 1$ to $4$}
+
+\State Compute occupancy probability $\hat{\pi}_k(t)$
+
+\State Compute self-transition probability $P_{kk}(t)$
+
+\EndFor
+
+
+\State Compute expected residence duration
+
+\State Compute entropy $H_i(t)$
+
+\State Compute stability index $\Psi_i(t)$
+
+\State Compute congestion trend $\Gamma_i(t)$
+
+\State Forward state to Phase IV
+
+\State \Return $S_i(t)$
+
+\end{algorithmic}
+\end{algorithm}
+
+The proposed four state classification phase converts continuous contention estimation into stable adaptive operating states. By combining threshold classification, hysteresis stabilization, state occupancy analysis and transition stability evaluation, this phase supports reliable adaptive scheduling decisions under highly dynamic network conditions.
+
+
+\subsection{Phase IV : Adaptive Duty Cycle Adjustment}
+
+After determining the contention state in Phase III, each node adapts its duty cycle according to congestion severity. The objective of this phase is to balance energy conservation and communication responsiveness through dynamic adjustment of active and sleep durations. Unlike fixed scheduling methods, the proposed approach continuously updates node duty cycles based on observed network conditions, allowing efficient operation under both low traffic and highly congested scenarios.
+
+The duty cycle of node $v_i$ is defined using Eq.~\ref{eq:p4duty}
+
+\begin{equation}
+D_i(t)=
+\frac{
+T_{on}
+}{
+T_{on}+T_{off}
+}
+\label{eq:p4duty}
+\end{equation}
+
+where $T_{on}$ denotes active duration and $T_{off}$ denotes sleep duration within a scheduling cycle.
+
+The duty cycle update rule is defined through Eq.~\ref{eq:p4update}
+
+\begin{equation}
+D_i(t+1)=
+D_i(t)
++
+\alpha
+\Delta_i(t)
+\label{eq:p4update}
+\end{equation}
+
+where $\alpha$ denotes adaptation step size and $\Delta_i(t)$ represents the contention dependent update increment.
+
+The update increment is determined according to Eq.~\ref{eq:p4inc}
+
+\begin{equation}
+\Delta_i(t)=
+\begin{cases}
+-1, & S_1 \\
+0, & S_2 \\
+1, & S_3 \\
+2, & S_4
+\end{cases}
+\label{eq:p4inc}
+\end{equation}
+
+which allows differentiated adaptation under low, moderate, high and critical contention conditions.
+
+To preserve feasible operation, duty cycle values are bounded using Eq.~\ref{eq:p4bounds}
+
+\begin{equation}
+D_{min}
+\le
+D_i(t)
+\le
+D_{max}
+\label{eq:p4bounds}
+\end{equation}
+
+where lower and upper bounds prevent excessive inactivity or continuous radio activity.
+
+The bounded duty cycle update is expressed in Eq.~\ref{eq:p4clip}
+
+\begin{equation}
+D_i(t+1)=
+\min
+\Big(
+D_{max},
+\max
+(D_{min},D_i(t+1))
+\Big)
+\label{eq:p4clip}
+\end{equation}
+
+ensuring bounded adaptation under all operating conditions.
+
+The active duration is updated using Eq.~\ref{eq:p4active}
+
+\begin{equation}
+T_{on}(t+1)=
+D_i(t+1)
+T_{cyc}
+\label{eq:p4active}
+\end{equation}
+
+where $T_{cyc}$ denotes scheduling cycle duration.
+
+Corresponding sleep duration follows Eq.~\ref{eq:p4sleep}
+
+\begin{equation}
+T_{off}(t+1)=
+\frac{
+T_{on}(t+1)
+(1-D_i(t+1))
+}{
+D_i(t+1)
+}
+\label{eq:p4sleep}
+\end{equation}
+
+which dynamically adjusts sleep intervals according to congestion conditions.
+
+Residual node energy evolves through Eq.~\ref{eq:p4energy}
+
+\begin{equation}
+E_i(t+1)=
+E_i(t)
+-
+E_{cons}(t)
+\label{eq:p4energy}
+\end{equation}
+
+where $E_{cons}(t)$ denotes energy consumed in the current cycle.
+
+Cycle energy expenditure is modeled through Eq.~\ref{eq:p4cyc}
+
+\begin{equation}
+E_{cyc}(t)=
+P_{active}T_{on}(t)
++
+P_{sleep}T_{off}(t)
+\label{eq:p4cyc}
+\end{equation}
+
+which captures both active and sleep state power usage.
+
+Energy saving ratio is quantified using Eq.~\ref{eq:p4save}
+
+\begin{equation}
+\rho_i(t)=
+1-
+\frac{
+E_{cyc}(t)
+}{
+P_{active}T_{cyc}
+}
+\label{eq:p4save}
+\end{equation}
+
+which measures efficiency gains relative to continuous active operation.
+
+Duty cycle deviation from nominal reference is monitored using Eq.~\ref{eq:p4dev}
+
+\begin{equation}
+\epsilon_i(t)=
+D_i(t)-D_{ref}
+\label{eq:p4dev}
+\end{equation}
+
+to track long term adaptation drift.
+
+Steady state convergence is verified through Eq.~\ref{eq:p4conv}
+
+\begin{equation}
+|D_i(t+1)-D_i(t)|
+\le
+\epsilon_{conv}
+\label{eq:p4conv}
+\end{equation}
+
+which determines whether adaptation has stabilized.
+
+The adaptive model defined in Eq.~\ref{eq:p4update} together with bounded scheduling in Eq.~\ref{eq:p4clip} provides dynamic balancing between communication capacity and energy preservation under changing contention conditions.
+
+\begin{algorithm}[H]
+\caption{Phase IV: Adaptive Duty Cycle Adjustment}
+\label{alg:phase4}
+\begin{algorithmic}[1]
+
+\Require State $S_i(t)$, duty cycle $D_i(t)$, residual energy $E_i(t)$
+\Ensure Updated duty cycle $D_i(t+1)$
+
+\State Map contention state to increment $\Delta_i(t)$
+
+\State Compute updated duty cycle:
+\[
+D_i(t+1) = D_i(t) + \alpha \Delta_i(t)
+\]
+
+\State Apply bounds:
+\[
+D_{\min} \le D_i(t+1) \le D_{\max}
+\]
+
+\State Compute active time $T_{on}(t+1)$
+\State Compute sleep time $T_{off}(t+1)$
+
+\State Estimate energy consumption $E_{cons}(t)$
+\State Update residual energy:
+\[
+E_i(t+1) = E_i(t) - E_{cons}(t)
+\]
+
+\State Compute energy saving ratio $\rho_i(t)$
+\State Compute duty cycle deviation $\epsilon_i(t)$
+
+\If{$E_i(t) < E_{thresh}$}
+\State Reduce duty cycle for energy saving
+\EndIf
+
+\If{convergence condition satisfied}
+\State Reduce update frequency
+\Else
+\State Continue adaptation
+\EndIf
+
+\State Forward $D_i(t+1)$ to Phase V
+
+\State \Return $D_i(t+1)$
+
+\end{algorithmic}
+\end{algorithm}
+
+The adaptive duty cycle phase links contention awareness with energy conscious scheduling through bounded control, convergence monitoring and residual energy adaptation. This phase enables scalable communication support while extending network lifetime under dense and dynamic wireless conditions.
+
+\subsection{Phase v : Adaptive Scheduling and AODV Routing}
+
+After adaptive duty cycle adjustment, the final phase translates contention awareness into scheduling and routing actions. This phase integrates adaptive wake scheduling, channel access coordination and AODV route selection into a unified cross layer communication framework. The objective is to reduce simultaneous channel access attempts, improve packet forwarding reliability and maintain scalable operation under dense deployments. The duty cycle computed in Phase 4 influences wake timing, while routing decisions are adjusted using local contention information. This interaction forms the final control layer of the proposed protocol and completes the adaptive feedback process.
+
+The effective wake scheduling instant for node $v_i$ is defined as
+
+\begin{equation}
+\tau_i(t)=\tau_0+\delta_i(t)
+\label{eq:wakeup}
+\end{equation}
+
+where $\tau_0$ denotes the nominal wake instant and $\delta_i(t)$ is a contention dependent offset. Equation \ref{eq:wakeup} enables temporal staggering among neighboring nodes to reduce synchronized channel access attempts.
+
+The wake offset is selected according to the classified contention state as
+
+\begin{equation}
+\delta_i(t)=
+\begin{cases}
+\delta_1, & S_1 \\
+\delta_2, & S_2 \\
+\delta_3, & S_3 \\
+\delta_4, & S_4
+\end{cases}
+\label{eq:offset}
+\end{equation}
+
+where
+
+\begin{equation}
+\delta_1<\delta_2<\delta_3<\delta_4
+\label{eq:ordering}
+\end{equation}
+
+As congestion increases, larger offsets are introduced according to \ref{eq:offset} and \ref{eq:ordering}, reducing collision probability.
+
+Neighbor wake separation is constrained by
+
+\begin{equation}
+|\tau_i(t)-\tau_j(t)| \ge T_g
+\label{eq:guard}
+\end{equation}
+
+where $T_g$ denotes a guard interval. This scheduling constraint limits overlap among concurrent transmissions.
+
+The probability of avoiding wake overlap is estimated as
+
+\begin{equation}
+P_{avoid,i}(t)=
+\left(
+1-\frac{T_g}{\Delta_{max}}
+\right)^{n_i}
+\label{eq:avoid}
+\end{equation}
+
+where $n_i$ is active neighbor count. Higher values of \ref{eq:avoid} indicate improved scheduling efficiency.
+
+Channel access follows adaptive random backoff modeled as
+
+\begin{equation}
+BO_i(t)\sim U[0,CW_i(t)]
+\label{eq:backoff}
+\end{equation}
+
+where $CW_i(t)$ denotes contention window size.
+
+The contention window evolves as
+
+\begin{equation}
+CW_i(t+1)=
+\begin{cases}
+CW_{min}, & success \\
+\min(2CW_i(t),CW_{max}), & failure
+\end{cases}
+\label{eq:cw}
+\end{equation}
+
+Equation \ref{eq:cw} increases access separation during repeated collisions while restoring aggressive access under successful transmission.
+
+Successful transmission probability is represented as
+
+\begin{equation}
+P_{succ,i}(t)=
+(1-p_{c,i}(t))^{n_i}
+\label{eq:succ}
+\end{equation}
+
+where $p_{c,i}(t)$ is collision probability. This metric links local contention estimates from earlier phases to channel access success.
+
+Queue service rate is computed as
+
+\begin{equation}
+\mu_i(t)=
+P_{succ,i}(t)
+\frac{T_{on}(t)}{T_p}
+\label{eq:service}
+\end{equation}
+
+where $T_p$ is packet duration.
+
+Node throughput is then
+
+\begin{equation}
+\Theta_i(t)=D_i(t)\mu_i(t)
+\label{eq:throughput}
+\end{equation}
+
+using duty cycle information obtained from Phase 4.
+
+Expected access delay is approximated as
+
+\begin{equation}
+d_i(t)=
+\frac{CW_i(t)}{2}T_s
+\label{eq:delay}
+\end{equation}
+
+where $T_s$ denotes slot duration. Lower values of \ref{eq:delay} correspond to improved latency.
+
+Routing support is integrated using AODV. When no route exists, route discovery begins through request propagation and reply establishment. To incorporate contention awareness into routing, path selection uses
+
+\begin{equation}
+R_{cost}
+=
+\omega_1H
++\omega_2E^{-1}
++\omega_3C_i(t)
+\label{eq:routecost}
+\end{equation}
+
+where $H$ is hop count, $E$ residual energy and $C_i(t)$ contention score. Equation \ref{eq:routecost} balances path length, energy efficiency and congestion.
+
+Route stability is measured by
+
+\begin{equation}
+\Psi_r=
+\frac{T_r}{N_b}
+\label{eq:routestability}
+\end{equation}
+
+where $T_r$ is route lifetime and $N_b$ denotes break events.
+
+Forwarding efficiency is further modeled as
+
+\begin{equation}
+F_i(t)=
+\frac{\Theta_i(t)}
+{1+d_i(t)}
+\label{eq:forwarding}
+\end{equation}
+
+which jointly reflects throughput and latency performance.
+
+Link utilization is represented as
+
+\begin{equation}
+U_i(t)=
+\frac{T_{tx}(t)}
+{T_{cyc}}
+\label{eq:utilization}
+\end{equation}
+
+where $T_{tx}$ denotes transmission time.
+
+Combined scheduling and routing gain is defined as
+
+\begin{equation}
+G_i(t)=
+\alpha F_i(t)+
+(1-\alpha)\Psi_r
+\label{eq:gain}
+\end{equation}
+
+where $\alpha$ controls the tradeoff between forwarding efficiency and route persistence.
+
+Algorithm \ref{alg:phase5} summarizes the adaptive scheduling and routing procedure.
+
+\begin{algorithm}[H]
+\caption{Phase V: Adaptive Scheduling and AODV Routing}
+\label{alg:phase5}
+\begin{algorithmic}[1]
+
+\Require Duty cycle $D_i(t)$, contention state $S_i(t)$, contention window $CW_i$
+\Ensure Adaptive scheduling and routing decision
+
+\For{each scheduling cycle}
+
+\State Compute wake-up time $\tau_i(t)$
+\State Select wake offset $\delta_i(t)$
+\State Enforce guard interval $T_{guard}$
+
+\State Wake up and perform carrier sensing
+
+\If{channel is idle}
+
+\State Generate random back off $BO_i(t)$
+\State Wait for back off duration
+
+\State Recheck channel
+
+\If{channel is idle}
+\State Transmit packet
+
+\If{ACK received}
+\State Reset contention window $CW_i \gets CW_{\min}$
+\State Update throughput
+\Else
+\State Increase contention window:
+\[
+CW_i = \min(2CW_i, CW_{\max})
+\]
+\State Register retransmission
+\EndIf
+
+\EndIf
+
+\Else
+\State Defer transmission
+\EndIf
+
+\If{route unavailable}
+\State Broadcast RREQ
+\State Receive RREP
+\State Establish route
+\EndIf
+
+\If{link failure detected}
+\State Generate RERR
+\State Trigger route rediscovery
+\EndIf
+
+\State Compute delay and throughput
+\State Update feedback to Phase I
+
+\EndFor
+
+\end{algorithmic}
+\end{algorithm}
+
+Phase 5 completes the proposed framework by integrating scheduling adaptation and routing optimization within a unified distributed mechanism. Through wake staggering, contention aware backoff and adaptive route selection, the phase reduces collisions, improves throughput and increases route persistence. The feedback returned from this phase to earlier observation stages closes the adaptive control loop and enables continuous protocol self adjustment under dynamic wireless conditions.
+
+\subsection{Integrated Adaptive MAC Routing Algorithm}
+
+The proposed method operates through a distributed iterative control process executed independently at each node. The algorithm unifies channel observation, contention estimation, state classification, adaptive duty scheduling and AODV route management into a single optimization framework. Unlike conventional layered protocols where routing and medium access are handled independently, the proposed algorithm establishes controlled interaction among protocol layers using the metrics derived in Equations \ref{eq:wakeup} through \ref{eq:gain}. This integration improves scalability, packet delivery reliability and energy utilization under dynamic network conditions.
+
+At each decision interval, every node first observes local channel statistics and forms the observation vector used for contention estimation. Based on the computed contention score, a contention state is assigned and adaptive scheduling decisions are generated. The node then performs contention aware channel access together with route establishment and maintenance. Performance indicators such as throughput, delay, queue backlog and residual energy are continuously updated and fed back into the next control cycle, thereby enabling adaptive self regulation.
+
+The distributed optimization objective of the algorithm is represented as
+
+\begin{equation}
+\max \; J
+=
+\alpha_1 PDR
++\alpha_2 \Theta
+-\alpha_3 d
++\alpha_4 E_{save}
+\label{eq:objective}
+\end{equation}
+
+subject to
+
+\begin{equation}
+D_{min}\le D_i(t)\le D_{max}
+\label{eq:const1}
+\end{equation}
+
+\begin{equation}
+CW_{min}\le CW_i(t)\le CW_{max}
+\label{eq:const2}
+\end{equation}
+
+\begin{equation}
+C_i(t)\in[0,1]
+\label{eq:const3}
+\end{equation}
+
+where the objective in Equation \ref{eq:objective} maximizes delivery and throughput while reducing delay and preserving energy.
+
+Queue evolution follows
+
+\begin{equation}
+Q_i(t+1)=
+Q_i(t)+A_i(t)-S_i(t)
+\label{eq:queuefinal}
+\end{equation}
+
+while node energy updates as
+
+\begin{equation}
+E_i(t+1)=
+E_i(t)-E_i^{cons}(t)
+\label{eq:energyfinal}
+\end{equation}
+
+Route quality used during forwarding decisions is evaluated through
+
+\begin{equation}
+R_i=
+\frac{\Psi_r \Theta_i}
+{1+d_i}
+\label{eq:routequality}
+\end{equation}
+
+where higher values imply better forwarding paths.
+
+The complete distributed operation is summarized in Algorithm \ref{alg:mainfinal}.
+
+\begin{algorithm}[H]
+\caption{Integrated Adaptive MAC Routing Algorithm}
+\label{alg:mainfinal}
+\begin{algorithmic}[1]
+
+\Require
+Initial node energy,
+queue capacity,
+contention thresholds,
+duty cycle bounds
+
+\Ensure
+Adaptive contention aware communication
+
+\State Initialize node parameters
+
+\While{network active}
+
+\State Observe channel occupancy
+
+\State Estimate collision probability
+
+\State Measure queue backlog
+
+\State Compute observation vector
+
+\State Compute contention score
+
+\State Apply smoothing update
+
+\State Classify contention state
+
+\State Update adaptive duty cycle
+
+\State Bound duty cycle using
+\ref{eq:const1}
+
+\State Compute wake scheduling instant
+
+\State Update contention window using
+\ref{eq:const2}
+
+\If{route unavailable}
+
+\State Broadcast route request
+
+\State Receive route reply
+
+\State Select path using route quality
+\ref{eq:routequality}
+
+\EndIf
+
+\State Perform carrier sensing
+
+\If{channel idle}
+
+\State Generate random backoff
+
+\State Wait and recheck medium
+
+\If{channel idle}
+
+\State Transmit packet
+
+\If{transmission success}
+
+\State Update throughput
+
+\State Reset contention window
+
+\Else
+
+\State Expand contention window
+
+\State Register retransmission
+
+\EndIf
+
+\EndIf
+
+\Else
+
+\State Defer access
+
+\EndIf
+
+\If{link failure detected}
+
+\State Trigger route repair
+
+\EndIf
+
+\State Update queue using
+\ref{eq:queuefinal}
+
+\State Update energy using
+\ref{eq:energyfinal}
+
+\State Evaluate objective function
+\ref{eq:objective}
+
+\State Feed updated statistics to next cycle
+
+\EndWhile
+
+\State Terminate operation
+
+\end{algorithmic}
+\end{algorithm}
+
+The proposed integrated algorithm enables distributed adaptation using only locally available measurements while avoiding centralized coordination overhead. Through joint optimization of contention estimation, duty scheduling and AODV route control, the algorithm reduces collisions, improves packet delivery ratio, minimizes delay and extends network lifetime. The feedback driven structure also ensures stable operation under changing topology and varying traffic intensity, making the framework suitable for scalable wireless ad hoc environments.
+
+\section{Results and Evaluation}
+
+\subsection{Simulation Setup}
+
+We perform simulation experiments to evaluate the proposed CAAM AODV protocol in scalable wireless ad hoc networks in the ns-3 simulator. A network of sensor nodes is randomly distributed over a constant area of simulation and communicates with each other using multi-hop routing based on the AODV protocol with the proposed adaptive MAC protocol. Scalability is assessed by varying the number of nodes, traffic load and contention level.Realistic network assumptions, such as contention, packet collisions, retransmissions, energy consumption and queue dynamics, are considered. We compare the performance of the proposed protocol with traditional contention unaware routing and MAC protocols under the same network conditions.
+
+Table~\ref{tab:simparams} summarises the major simulation parameters used for evaluation.
+
+\subsection{Performance Evaluation Metrics}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res1.pdf}
+\captionof{figure}{Packets Sent versus Number of Nodes}
+\label{fig:res1}
+\end{center}
+
+Figure~\ref{fig:res1} shows the variation of packets sent with respect to the number of nodes. As the network size increases, the number of generated packets also increases due to higher communication demand. However, fluctuations are observed due to varying traffic patterns and contention levels in the network.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res2.pdf}
+\captionof{figure}{Packets Received versus Number of Nodes}
+\label{fig:res2}
+\end{center}
+
+Figure~\ref{fig:res2} presents the number of successfully received packets. The received packets increase with node density, but not proportionally to packets sent due to collisions and retransmissions in dense environments.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res3.pdf}
+\captionof{figure}{Packets Sent and Received Comparison}
+\label{fig:res3}
+\end{center}
+
+Figure~\ref{fig:res3} compares transmitted and received packets. A noticeable gap exists between them, which indicates packet loss due to interference, congestion, and dynamic topology changes.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res4.pdf}
+\captionof{figure}{Packet Delivery Ratio versus Number of Nodes}
+\label{fig:res4}
+\end{center}
+
+Figure~\ref{fig:res4} shows the packet delivery ratio. The ratio varies across different node densities, indicating that network performance is influenced by congestion and link quality.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res5.pdf}
+\captionof{figure}{PDR Comparison with Existing Method}
+\label{fig:res5}
+\end{center}
+
+Figure~\ref{fig:res5} compares the packet delivery ratio of the proposed method with an existing approach. The proposed method achieves better delivery performance due to adaptive behavior.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res6.pdf}
+\captionof{figure}{End to End Delay versus Number of Nodes}
+\label{fig:res6}
+\end{center}
+
+Figure~\ref{fig:res6} shows the delay experienced in packet transmission. Delay decreases initially and stabilizes due to improved routing efficiency under moderate load.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res7.pdf}
+\captionof{figure}{Delay Comparison with Existing Method}
+\label{fig:res7}
+\end{center}
+
+Figure~\ref{fig:res7} presents delay comparison. The proposed method shows lower delay compared to the existing method due to better congestion control.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res8.pdf}
+\captionof{figure}{Jitter versus Number of Nodes}
+\label{fig:res8}
+\end{center}
+
+Figure~\ref{fig:res8} shows jitter variation. Jitter reduces significantly after initial nodes, indicating improved stability in packet transmission timing.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res9.pdf}
+\captionof{figure}{Throughput versus Number of Nodes}
+\label{fig:res9}
+\end{center}
+
+Figure~\ref{fig:res9} presents throughput performance. The throughput increases with node density, showing better utilization of network resources.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res10.pdf}
+\captionof{figure}{Throughput Comparison with Existing Method}
+\label{fig:res10}
+\end{center}
+
+Figure~\ref{fig:res10} compares throughput. The proposed method achieves higher throughput due to efficient routing and reduced packet loss.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res11.pdf}
+\captionof{figure}{Energy Consumption versus Number of Nodes}
+\label{fig:res11}
+\end{center}
+
+Figure~\ref{fig:res11} shows energy consumption. Energy usage varies with node count, but remains controlled due to adaptive transmission behavior.
+
+\vspace{0.3cm}
+
+\begin{center}
+\includegraphics[width=0.48\textwidth]{figures/res12.pdf}
+\captionof{figure}{Communication Overhead versus Number of Nodes}
+\label{fig:res12}
+\end{center}
+
+Figure~\ref{fig:res12} shows communication overhead. Overhead increases with node density due to higher control packet exchange.
+
+\vspace{0.3cm}
+
+\subsection{Comparative Performance Analysis}
+
+This section presents the simulation results of the proposed CAAM AODV protocol under varying node densities and traffic loads. The performance is evaluated using key metrics such as throughput, delay, packet delivery ratio, energy consumption, and network lifetime. Figures~\ref{fig:topology} to \ref{fig:lifetime} illustrate both the operational behavior of the protocol and its corresponding performance outcomes. The results clearly demonstrate that adaptive contention estimation combined with duty cycle scheduling significantly improves communication efficiency while reducing congestion and unnecessary energy expenditure. 
+
+The throughput analysis indicates efficient channel utilization as the number of nodes increases, highlighting the scalability of the proposed approach. Similarly, delay analysis shows reduced latency due to dynamic contention-aware adaptations in routing and transmission decisions. Packet delivery ratio results confirm improved reliability even under dense network conditions. Furthermore, energy consumption analysis reveals reduced power usage, which directly contributes to extended network lifetime. Overall, the proposed protocol consistently outperforms existing methods across all evaluated performance metrics.
+
+\subsection{Discussion of Results}
+
+The obtained simulation results clearly demonstrate the effectiveness of integrating contention-aware MAC adaptation with AODV-based routing. The proposed protocol achieves higher throughput and packet delivery ratio while maintaining lower delay and energy consumption, particularly in dense and highly dynamic network scenarios. This improvement can be attributed to the combined effect of adaptive contention estimation and intelligent resource utilization.
+
+The use of multi-state contention estimation enables the network to dynamically adjust transmission behavior based on real-time channel conditions. In addition, dynamic duty-cycle adaptation and coordinated sleep-wake scheduling significantly reduce packet collisions and improve channel efficiency. These mechanisms collectively enhance network stability and ensure consistent performance under varying traffic conditions.
+
+Furthermore, the results indicate that the proposed protocol maintains stable performance as node density increases, demonstrating strong scalability. In contrast, traditional approaches suffer from congestion and performance degradation under similar conditions. Therefore, the proposed CAAM-AODV protocol effectively satisfies the objectives of scalability, energy efficiency, and reliable communication in dynamic wireless ad hoc network environments.
+
+\section{Conclusion and Future work}
+
+\subsection{Conclusion}
+
+In this paper, a scalable wireless ad hoc network architecture with Contention-Aware Adaptive MAC (CAAM) and AODV Routing (AODV) was proposed. The proposed cross-layer protocol seamlessly combines channel sensing, contention measurement, adaptive sleep-wake scheduling and AODV routing to enhance communication efficiency in dynamic environments.The proposed framework enables interaction between MAC and routing layers to make adaptive decisions for transmission and routing based on local contention information, in contrast to the traditional layered approach. The protocol utilizes a four-state contention classification method and adaptive sleep-wake scheduling to adaptively trade off energy efficiency and communication responsiveness based on traffic load and contention levels.
+
+Simulation experiments show that the proposed protocol enhances key network performance metrics such as packet delivery ratio, throughput and network lifetime, and reduces end-to-end delay, collision probability and energy consumption. The protocol also provided superior scalability with node density growth and robust performance under variable contention conditions.In summary, the simulation results confirm that the proposed CAAM-AODV protocol is an effective approach for reliable, energy-efficient and scalable communication in wireless ad hoc networks.
+
+\subsection{Future Work}
+
+While the proposed framework can significantly improve the system performance, there are a number of extensions that can further improve the framework. A machine learning or reinforcement learning based adaptive optimization may be investigated for smart contention prediction and automatic control of routing parameters in dynamic traffic scenarios.This may also be achieved by extending the routing component with mobility prediction and link stability metrics to enhance the route selection process in highly mobility ad hoc networks. Other cross layer information such as interference prediction, channel state and data traffic priority can also be considered.
+
+The protocol can also be further investigated in large scale Internet of Things scenarios and practical wireless networks using realistic hardware limitations. Resilience can also be further enhanced by integrating security-aware features such as malicious activity, denial of service and route attack detection.
+These approaches can further enhance the proposed CAAM-AODV protocol and facilitate more efficient, secure and scalable wireless networks.
+
+\section*{Declarations}
+
+\subsection*{Ethical Approval}
+This study includes simulation modeling and performance analysis of wireless ad hoc networks and does not involve humans, animals or human data. As such, ethical approval was not necessary.
+
+\subsection*{Conflict of Interest}
+The authors have reported no conflicts of interest.
+
+\subsection*{Author Contributions}
+All authors were involved in the conception of the idea, methodology, design of the simulations, results analysis, and preparation of the manuscript. All authors have reviewed the manuscript.
+
+\subsection*{Funding}
+The work reported here was undertaken as part of project work and did not receive any specific grant from funding agencies in the public, commercial or not-for-profit sectors.
+
+\subsubsection*{Data Availability
+Data obtained from simulation and analysis. Simulation parameters and results can be made available from the authors on request.
+
+\subsection*{Acknowledgment}
+The authors would like to express their thanks to the project guide for his insightful suggestions, support and encouragement.
+
+\bibliographystyle{cas-model2-names}
+\bibliography{references}
+
+
+\end{document}
