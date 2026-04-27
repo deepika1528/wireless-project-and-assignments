@@ -1,1 +1,138 @@
+#include "ns3/core-module.h"
+#include "ns3/network-module.h"
+#include "ns3/mobility-module.h"
+#include "ns3/internet-module.h"
+#include "ns3/aodv-module.h"
+#include "ns3/yans-wifi-helper.h"
+#include "ns3/netanim-module.h"
+#include "ns3/applications-module.h"
+#include "ns3/flow-monitor-module.h"
+#include <cmath>
 
+using namespace ns3;
+
+void RunSimulation(uint32_t nNodes, uint32_t nPackets)
+{
+    double simTime = 40.0;
+
+    NodeContainer nodes;
+    nodes.Create(nNodes);
+
+    // WIFI
+    WifiHelper wifi;
+    wifi.SetStandard(WIFI_STANDARD_80211b);
+
+    YansWifiPhyHelper phy;
+    YansWifiChannelHelper channel = YansWifiChannelHelper::Default();
+    phy.SetChannel(channel.Create());
+
+    WifiMacHelper mac;
+    mac.SetType("ns3::AdhocWifiMac");
+
+    NetDeviceContainer devices = wifi.Install(phy, mac, nodes);
+
+    // MOBILITY
+    uint32_t gridWidth = ceil(sqrt(nNodes));
+
+    MobilityHelper mobility;
+    mobility.SetPositionAllocator("ns3::GridPositionAllocator",
+        "MinX", DoubleValue(0.0),
+        "MinY", DoubleValue(0.0),
+        "DeltaX", DoubleValue(20.0),
+        "DeltaY", DoubleValue(20.0),
+        "GridWidth", UintegerValue(gridWidth),
+        "LayoutType", StringValue("RowFirst"));
+
+    mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
+    mobility.Install(nodes);
+
+    // INTERNET
+    InternetStackHelper internet;
+    AodvHelper aodv;
+    internet.SetRoutingHelper(aodv);
+    internet.Install(nodes);
+
+    Ipv4AddressHelper ip;
+    ip.SetBase("10.0.0.0", "255.0.0.0");
+    Ipv4InterfaceContainer interfaces = ip.Assign(devices);
+
+    // TRAFFIC
+    uint32_t src = 0;
+    uint32_t dst = nNodes - 1;
+    uint16_t port = 9000;
+
+    OnOffHelper onoff("ns3::UdpSocketFactory",
+        InetSocketAddress(interfaces.GetAddress(dst), port));
+
+    onoff.SetConstantRate(DataRate("500kbps"), 512);
+    onoff.SetAttribute("MaxBytes", UintegerValue(nPackets * 512));
+
+    ApplicationContainer app = onoff.Install(nodes.Get(src));
+    app.Start(Seconds(1.0));
+    app.Stop(Seconds(simTime));
+
+    PacketSinkHelper sink("ns3::UdpSocketFactory",
+        InetSocketAddress(Ipv4Address::GetAny(), port));
+
+    ApplicationContainer sinkApp = sink.Install(nodes.Get(dst));
+    sinkApp.Start(Seconds(0.0));
+    sinkApp.Stop(Seconds(simTime));
+
+    // FLOW MONITOR
+    FlowMonitorHelper flowmon;
+    Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+
+    AnimationInterface anim("final.xml");
+
+    Simulator::Stop(Seconds(simTime));
+    Simulator::Run();
+
+    monitor->CheckForLostPackets();
+
+    uint32_t tx = 0, rx = 0;
+    double delay = 0, jitter = 0;
+    uint64_t rxBytes = 0;
+    uint32_t lost = 0;
+
+    for (auto &flow : monitor->GetFlowStats())
+    {
+        tx += flow.second.txPackets;
+        rx += flow.second.rxPackets;
+        rxBytes += flow.second.rxBytes;
+        delay += flow.second.delaySum.GetSeconds();
+        jitter += flow.second.jitterSum.GetSeconds();
+        lost += flow.second.lostPackets;
+    }
+
+    double pdr = (tx > 0) ? (100.0 * rx / tx) : 0;
+    double avgDelay = (rx > 0) ? (delay / rx) : 0;
+    double avgJitter = (rx > 0) ? (jitter / rx) : 0;
+    double throughput = (rxBytes * 8.0 / simTime) / 1000;
+    double overhead = lost;
+    double compOverhead = nNodes * avgDelay;
+    double energy = rxBytes * 0.00005;
+
+    std::cout << "\n========== FINAL RESULT ==========\n";
+    std::cout << "Nodes: " << nNodes << std::endl;
+    std::cout << "Packets Sent: " << tx << std::endl;
+    std::cout << "Packets Received: " << rx << std::endl;
+    std::cout << "PDR: " << pdr << " %\n";
+    std::cout << "Delay: " << avgDelay << " sec\n";
+    std::cout << "Jitter: " << avgJitter << " sec\n";
+    std::cout << "Throughput: " << throughput << " Kbps\n";
+    std::cout << "Communication Overhead: " << overhead << std::endl;
+    std::cout << "Computational Overhead: " << compOverhead << std::endl;
+    std::cout << "Energy Consumption: " << energy << " J\n";
+
+    Simulator::Destroy();
+}
+
+int main()
+{
+  
+    uint32_t nodes = 100;
+    uint32_t packets = 150;
+
+    RunSimulation(nodes, packets);
+    return 0;
+}
