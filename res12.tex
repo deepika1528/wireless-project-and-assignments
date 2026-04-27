@@ -1,0 +1,25 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[
+width=16cm,
+height=10cm,
+ybar,
+bar width=14pt,
+xlabel={Number of Nodes},
+ylabel={Communication Overhead},
+symbolic x coords={75,85,100,150,200},
+xtick=data,
+grid=major
+]
+
+\addplot coordinates {
+(75,112)(85,120)(100,118)(150,110)(200,130)
+};
+
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

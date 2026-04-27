@@ -1,0 +1,28 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.17}
+\begin{document}
+
+\begin{tikzpicture}
+\begin{axis}[
+width=16cm,
+height=10cm,
+ybar stacked,
+bar width=12pt,
+xlabel={Number of Nodes},
+ylabel={Combined Metric},
+symbolic x coords={75,85,100,150,200},
+xtick=data,
+legend pos=north west,
+grid=major
+]
+
+\addplot coordinates {(75,0.64)(85,0.58)(100,0.60)(150,0.62)(200,0.55)};
+\addplot coordinates {(75,0.42)(85,0.88)(100,0.76)(150,0.69)(200,1.10)};
+
+\legend{Energy, Throughput}
+
+\end{axis}
+\end{tikzpicture}
+
+\end{document}

@@ -1,0 +1,18 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+width=16cm,height=10cm,
+xlabel={Number of Nodes},
+ylabel={PDR (\%)},
+xmin=70,xmax=205,
+ymin=20,ymax=100,
+grid=major
+]
+\addplot+[mark=o,thick] coordinates {
+(75,33)(85,53)(100,43)(150,48)(200,90)
+};
+\end{axis}
+\end{tikzpicture}
+\end{document}

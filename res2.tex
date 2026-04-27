@@ -1,0 +1,18 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+width=16cm,height=10cm,
+xlabel={Number of Nodes},
+ylabel={Packets Received},
+xmin=70,xmax=205,
+ymin=40,ymax=250,
+grid=major
+]
+\addplot+[mark=square*,thick] coordinates {
+(75,45)(85,112)(100,92)(150,68)(200,239)
+};
+\end{axis}
+\end{tikzpicture}
+\end{document}

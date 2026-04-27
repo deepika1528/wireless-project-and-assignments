@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="8dINFuXIZ9EeENzxZZh5">
+    <mxGraphModel dx="1030" dy="562" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="M-fboD5tGQKfx_86U2As-34" edge="1" parent="1" source="M-fboD5tGQKfx_86U2As-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="M-fboD5tGQKfx_86U2As-31" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-28" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Phase 1:&#xa; Channel Observation&#xa;-------------------------------------&#xa; bi(t): Channel Busy Ratio&#xa; pci(t): Collision Rate&#xa; qi(t): Queue Length&#xa; ri(t): Retransmissions&#xa; Output: zi(t)" vertex="1">
+          <mxGeometry height="150" width="150" x="120" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-37" edge="1" parent="1" source="M-fboD5tGQKfx_86U2As-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="M-fboD5tGQKfx_86U2As-30" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-29" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Phase 4:&#xa; Duty Cycle Adjustment&#xa;------------------------------------&#xa; Low → Reduce Duty Cycle&#xa; High → Increase Duty Cycle" vertex="1">
+          <mxGeometry height="150" width="150" x="720" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-38" edge="1" parent="1" source="M-fboD5tGQKfx_86U2As-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="M-fboD5tGQKfx_86U2As-33" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-30" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Phase 5:&#xa; Sleep-Wake Scheduling&#xa;-------------------------------------&#xa; Wake → Sense → Backoff→ Transmit → ACK" vertex="1">
+          <mxGeometry height="150" width="150" x="920" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-35" edge="1" parent="1" source="M-fboD5tGQKfx_86U2As-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="M-fboD5tGQKfx_86U2As-32" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-31" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Phase 2:&#xa; Contention Score&#xa;-------------------------------------&#xa; Ci(t) = w1bi + w2pci + w3qi + w4ri&#xa; Smoothing Applied" vertex="1">
+          <mxGeometry height="150" width="150" x="320" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-36" edge="1" parent="1" source="M-fboD5tGQKfx_86U2As-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="M-fboD5tGQKfx_86U2As-29" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-32" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="Phase 3:&#xa; State Classification&#xa;------------------------------------&#xa; S1: Low&#xa; S2: Moderate&#xa; S3: High&#xa; S4: Critical" vertex="1">
+          <mxGeometry height="150" width="150" x="520" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="M-fboD5tGQKfx_86U2As-33" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="AODV Routing&#xa;------------------------------------&#xa; Route Discovery&#xa; Route Maintenance&#xa; Dynamic Path Selection" vertex="1">
+          <mxGeometry height="150" width="150" x="1120" y="160" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

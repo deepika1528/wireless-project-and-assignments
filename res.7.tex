@@ -1,0 +1,23 @@
+\documentclass{standalone}
+\usepackage{pgfplots}
+\begin{document}
+\begin{tikzpicture}
+\begin{axis}[
+width=16cm,height=10cm,
+xlabel={Number of Nodes},
+ylabel={Delay (sec)},
+xmin=70,xmax=205,
+ymin=0.04,ymax=0.30,
+grid=major,
+legend pos=north east
+]
+\addplot+[mark=o,thick] coordinates {
+(75,0.25)(85,0.058)(100,0.073)(150,0.064)(200,0.064)
+};
+\addplot+[mark=square*,thick] coordinates {
+(75,0.28)(85,0.08)(100,0.09)(150,0.08)(200,0.07)
+};
+\legend{Proposed,Existing}
+\end{axis}
+\end{tikzpicture}
+\end{document}
