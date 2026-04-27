@@ -28,13 +28,13 @@ void RunSimulation(uint32_t nNodes, uint32_t packetCount)
     WifiMacHelper mac;
     mac.SetType("ns3::AdhocWifiMac");
 
-    // 🔥 Strong signal for 400 nodes
+   
     phy.Set("TxPowerStart", DoubleValue(30.0));
     phy.Set("TxPowerEnd", DoubleValue(30.0));
 
     NetDeviceContainer devices = wifi.Install(phy, mac, nodes);
 
-    // ================= MOBILITY (IMPORTANT FOR 400 NODES) =================
+    // ================= MOBILITY  =================
     MobilityHelper mobility;
 
     Ptr<RandomRectanglePositionAllocator> pos =
