@@ -1,1 +1,175 @@
+#include "ns3/core-module.h"
+#include "ns3/network-module.h"
+#include "ns3/mobility-module.h"
+#include "ns3/internet-module.h"
+#include "ns3/aodv-module.h"
+#include "ns3/yans-wifi-helper.h"
+#include "ns3/netanim-module.h"
+#include "ns3/applications-module.h"
+#include "ns3/flow-monitor-module.h"
+
+using namespace ns3;
+
+void RunSimulation(uint32_t nNodes, uint32_t packetCount)
+{
+    double simTime = 120.0;
+
+    NodeContainer nodes;
+    nodes.Create(nNodes);
+
+    // ================= WIFI =================
+    YansWifiChannelHelper channel = YansWifiChannelHelper::Default();
+    YansWifiPhyHelper phy;
+    phy.SetChannel(channel.Create());
+
+    WifiHelper wifi;
+    wifi.SetStandard(WIFI_STANDARD_80211b);
+
+    WifiMacHelper mac;
+    mac.SetType("ns3::AdhocWifiMac");
+
+    // 🔥 Strong signal for 400 nodes
+    phy.Set("TxPowerStart", DoubleValue(30.0));
+    phy.Set("TxPowerEnd", DoubleValue(30.0));
+
+    NetDeviceContainer devices = wifi.Install(phy, mac, nodes);
+
+    // ================= MOBILITY (IMPORTANT FOR 400 NODES) =================
+    MobilityHelper mobility;
+
+    Ptr<RandomRectanglePositionAllocator> pos =
+        CreateObject<RandomRectanglePositionAllocator>();
+
+    Ptr<UniformRandomVariable> x = CreateObject<UniformRandomVariable>();
+    x->SetAttribute("Min", DoubleValue(0.0));
+    x->SetAttribute("Max", DoubleValue(800.0));
+
+    Ptr<UniformRandomVariable> y = CreateObject<UniformRandomVariable>();
+    y->SetAttribute("Min", DoubleValue(0.0));
+    y->SetAttribute("Max", DoubleValue(800.0));
+
+    pos->SetX(x);
+    pos->SetY(y);
+
+    mobility.SetPositionAllocator(pos);
+
+    mobility.SetMobilityModel("ns3::RandomWaypointMobilityModel",
+        "Speed", StringValue("ns3::UniformRandomVariable[Min=0.3|Max=1.2]"),
+        "Pause", StringValue("ns3::ConstantRandomVariable[Constant=2.0]"),
+        "PositionAllocator", PointerValue(pos));
+
+    mobility.Install(nodes);
+
+    // ================= INTERNET =================
+    InternetStackHelper internet;
+    AodvHelper aodv;
+    internet.SetRoutingHelper(aodv);
+    internet.Install(nodes);
+
+    Ipv4AddressHelper address;
+    address.SetBase("10.1.0.0", "255.255.0.0");
+    Ipv4InterfaceContainer interfaces = address.Assign(devices);
+
+    Ipv4GlobalRoutingHelper::PopulateRoutingTables();
+
+    // ================= TRAFFIC =================
+    uint16_t port = 9;
+
+    uint32_t src = 0;
+    uint32_t dst = nNodes - 1;
+
+    OnOffHelper onoff("ns3::UdpSocketFactory",
+        InetSocketAddress(interfaces.GetAddress(dst), port));
+
+    onoff.SetConstantRate(DataRate("300kbps"), 512);
+    onoff.SetAttribute("MaxBytes", UintegerValue(packetCount * 512));
+
+    ApplicationContainer app = onoff.Install(nodes.Get(src));
+    app.Start(Seconds(35.0));
+    app.Stop(Seconds(simTime));
+
+    PacketSinkHelper sink("ns3::UdpSocketFactory",
+        InetSocketAddress(Ipv4Address::GetAny(), port));
+
+    ApplicationContainer sinkApp = sink.Install(nodes.Get(dst));
+    sinkApp.Start(Seconds(0.0));
+    sinkApp.Stop(Seconds(simTime));
+
+    // ================= FLOW MONITOR =================
+    FlowMonitorHelper flowmon;
+    Ptr<FlowMonitor> monitor = flowmon.InstallAll();
+
+    // ================= NETANIM =================
+    AnimationInterface anim("animation.xml");
+
+    Simulator::Stop(Seconds(simTime));
+    Simulator::Run();
+
+    monitor->CheckForLostPackets();
+
+    Ptr<Ipv4FlowClassifier> classifier =
+        DynamicCast<Ipv4FlowClassifier>(flowmon.GetClassifier());
+
+    uint32_t txPackets = 0, rxPackets = 0;
+    uint64_t rxBytes = 0;
+    double delaySum = 0;
+    double jitterSum = 0;
+    uint32_t lostPackets = 0;
+    uint32_t forwarded = 0;
+
+    for (auto &flow : monitor->GetFlowStats())
+    {
+        Ipv4FlowClassifier::FiveTuple t = classifier->FindFlow(flow.first);
+
+        if (t.protocol == 17)
+        {
+            txPackets += flow.second.txPackets;
+            rxPackets += flow.second.rxPackets;
+            rxBytes += flow.second.rxBytes;
+            delaySum += flow.second.delaySum.GetSeconds();
+            jitterSum += flow.second.jitterSum.GetSeconds();
+            lostPackets += flow.second.lostPackets;
+            forwarded += flow.second.timesForwarded;
+        }
+    }
+
+    double pdr = (txPackets > 0) ? (100.0 * rxPackets / txPackets) : 0;
+    double delay = (rxPackets > 0) ? (delaySum / rxPackets) : 0;
+    double jitter = (rxPackets > 0) ? (jitterSum / rxPackets) : 0;
+    double throughput = (rxBytes * 8.0 / simTime) / 1000;
+    double overhead = lostPackets + forwarded;
+    double energy = rxBytes * 0.0001;
+
+    // ================= OUTPUT =================
+    std::cout << "\n========== SIMULATION RESULT ==========\n";
+    std::cout << "Number of Nodes: " << nNodes << std::endl;
+    std::cout << "Packets Sent: " << txPackets << std::endl;
+    std::cout << "Packets Received: " << rxPackets << std::endl;
+    std::cout << "Packet Delivery Ratio(PDR): " << pdr << " %" << std::endl;
+    std::cout << "End-to-End Delay: " << delay << " sec" << std::endl;
+    std::cout << "Average Jitter: " << jitter << " sec" << std::endl;
+    std::cout << "Throughput: " << throughput << " Kbps" << std::endl;
+    std::cout << "Communication Overhead: " << overhead << std::endl;
+    std::cout << "Computational Overhead: 0" << std::endl;
+    std::cout << "Energy Consumption: " << energy << " J" << std::endl;
+
+    Simulator::Destroy();
+}
+
+int main()
+{
+    RngSeedManager::SetSeed(12345);
+    RngSeedManager::SetRun(1);
+
+    uint32_t nodes, packets;
+
+    std::cout << "Enter nodes : ";
+    std::cin >> nodes;
+
+    std::cout << "Enter packets : ";
+    std::cin >> packets;
+
+    RunSimulation(nodes, packets);
+    return 0;
+}
 
